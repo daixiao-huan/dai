@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { Clock, Award, Star, Filter } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import CourseSystem from '../components/CourseSystem';
 import { useCourseStore } from '../lib/store';
 
 // Mock data for courses
@@ -98,6 +99,12 @@ const Courses: React.FC = () => {
         <section className="py-12 bg-white">
           <div className="container mx-auto px-4">
             <h1 className="text-3xl font-bold mb-8">全部课程</h1>
+            
+            {/* 系统化课程体系 */}
+            <div className="mb-12">
+              <h2 className="text-2xl font-bold mb-6">课程体系</h2>
+              <CourseSystem />
+            </div>
             
             {/* Filters */}
             <div className="mb-8">

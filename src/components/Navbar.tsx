@@ -32,6 +32,9 @@ const Navbar: React.FC = () => {
             <Link to="/courses" className="text-gray-700 hover:text-[#4A6FA5] font-medium">课程</Link>
             {user ? (
               <>
+                <Link to="/practice" className="text-gray-700 hover:text-[#4A6FA5] font-medium">练习</Link>
+                <Link to="/quizzes" className="text-gray-700 hover:text-[#4A6FA5] font-medium">测验</Link>
+                <Link to="/progress" className="text-gray-700 hover:text-[#4A6FA5] font-medium">进度</Link>
                 <Link to="/dashboard" className="text-gray-700 hover:text-[#4A6FA5] font-medium">仪表盘</Link>
                 <Link to="/achievements" className="text-gray-700 hover:text-[#4A6FA5] font-medium">成就</Link>
                 <div className="flex items-center space-x-2">
@@ -63,6 +66,9 @@ const Navbar: React.FC = () => {
               <Link to="/courses" className="text-gray-700 hover:text-[#4A6FA5] font-medium py-2">课程</Link>
               {user ? (
                 <>
+                  <Link to="/practice" className="text-gray-700 hover:text-[#4A6FA5] font-medium py-2">练习</Link>
+                  <Link to="/quizzes" className="text-gray-700 hover:text-[#4A6FA5] font-medium py-2">测验</Link>
+                  <Link to="/progress" className="text-gray-700 hover:text-[#4A6FA5] font-medium py-2">进度</Link>
                   <Link to="/dashboard" className="text-gray-700 hover:text-[#4A6FA5] font-medium py-2">仪表盘</Link>
                   <Link to="/achievements" className="text-gray-700 hover:text-[#4A6FA5] font-medium py-2">成就</Link>
                   <div className="flex items-center space-x-2 py-2">
