@@ -358,7 +358,6 @@ const CourseDetail: React.FC = () => {
               
               {/* 练习题目 */}
               <div className="mb-6">
-                <h4 className="font-medium mb-3">练习题目：</h4>
                 <ul className="space-y-6">
                   {selectedExercise.content.map((item: any, index: number) => {
                     const question = typeof item === 'string' ? item : item.question;
@@ -366,28 +365,12 @@ const CourseDetail: React.FC = () => {
                     
                     return (
                       <li key={index} className="p-4 border rounded-lg">
-                        <div className="font-medium mb-4">{index + 1}. {question}</div>
+                        <div className="font-medium mb-4">{question}</div>
                         
-                        {/* 代码编辑器（对编程题和数据分析题都显示） */}
-                        {(selectedExercise.type === '编程题' || selectedExercise.type === '数据分析题') && (
-                          <CodeEditor
-                            initialCode={initialCode}
-                            onRunCode={handleRunCode}
-                            output={codeOutput}
-                            error={codeError}
-                          />
-                        )}
-                        
-                        {/* 普通答题区域 */}
-                        {selectedExercise.type !== '编程题' && selectedExercise.type !== '数据分析题' && (
-                          <div className="mt-2">
-                            <textarea 
-                              className="w-full p-3 border rounded-lg" 
-                              placeholder="在此处输入答案" 
-                              rows={4}
-                            ></textarea>
-                          </div>
-                        )}
+                        {/* 代码编辑器（所有类型都显示） */}
+                        <CodeEditor
+                          initialCode={initialCode}
+                        />
                       </li>
                     );
                   })}
@@ -457,9 +440,6 @@ const CourseDetail: React.FC = () => {
                         {(selectedAssessment.type === '项目' || question.includes('Python') || question.includes('代码')) && (
                           <CodeEditor
                             initialCode={initialCode}
-                            onRunCode={handleRunCode}
-                            output={codeOutput}
-                            error={codeError}
                           />
                         )}
                         
