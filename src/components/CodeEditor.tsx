@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { EditorState } from '@codemirror/state';
 import { EditorView, keymap, lineNumbers, highlightActiveLineGutter, highlightSpecialChars, drawSelection, dropCursor, rectangularSelection, crosshairCursor, highlightActiveLine, placeholder } from '@codemirror/view';
 import { python } from '@codemirror/lang-python';
@@ -25,12 +25,21 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [code, setCode] = useState(initialCode);
   const editorRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
+  const isFirstRender = useRef(true);
+
+  const handleUpdate = useCallback((update: { docChanged: boolean; state: { doc: { toString: () => string } } }) => {
+    if (update.docChanged) {
+      const newCode = update.state.doc.toString();
+      setCode(newCode);
+      onCodeChange?.(newCode);
+    }
+  }, [onCodeChange]);
 
   useEffect(() => {
     if (!editorRef.current) return;
 
     const startState = EditorState.create({
-      doc: code,
+      doc: initialCode,
       extensions: [
         lineNumbers(),
         highlightActiveLineGutter(),
@@ -45,13 +54,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         oneDark,
         keymap.of([...defaultKeymap, ...historyKeymap]),
         placeholder('在此输入Python代码...'),
-        EditorView.updateListener.of(update => {
-          if (update.docChanged) {
-            const newCode = update.state.doc.toString();
-            setCode(newCode);
-            onCodeChange?.(newCode);
-          }
-        }),
+        EditorView.updateListener.of(handleUpdate),
         EditorState.readOnly.of(readOnly)
       ]
     });
@@ -66,7 +69,20 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     return () => {
       view.destroy();
     };
-  }, [code, readOnly, onCodeChange]);
+  }, []);
+
+  useEffect(() => {
+    if (!isFirstRender.current && viewRef.current && initialCode !== code) {
+      viewRef.current.dispatch({
+        changes: {
+          from: 0,
+          to: viewRef.current.state.doc.length,
+          insert: initialCode
+        }
+      });
+    }
+    isFirstRender.current = false;
+  }, [initialCode]);
 
   const handleRunCode = () => {
     onRunCode?.(code);
@@ -85,18 +101,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       </div>
       <div
         ref={editorRef}
-        className="border rounded-lg overflow-hidden h-64"
+        className="border rounded-lg overflow-hidden h-64 focus:outline-none focus:ring-2 focus:ring-[#4A6FA5]"
+        tabIndex={0}
       />
       {output && (
         <div className="mt-4 p-4 bg-gray-50 border rounded-lg">
           <h4 className="font-medium text-gray-700 mb-2">输出结果：</h4>
-          <pre className="whitespace-pre-wrap text-gray-800">{output}</pre>
+          <pre className="whitespace-pre-wrap text-gray-800 font-mono text-sm">{output}</pre>
         </div>
       )}
       {error && (
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
           <h4 className="font-medium text-red-700 mb-2">错误信息：</h4>
-          <pre className="whitespace-pre-wrap text-red-800">{error}</pre>
+          <pre className="whitespace-pre-wrap text-red-800 font-mono text-sm">{error}</pre>
         </div>
       )}
     </div>

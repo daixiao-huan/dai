@@ -5,72 +5,19 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CourseSystem from '../components/CourseSystem';
 import { useCourseStore } from '../lib/store';
-
-// Mock data for courses
-const mockCourses = [
-  {
-    id: 1,
-    title: '数据分析Python基础',
-    description: '学习数据分析所需的Python编程基础',
-    category: 'Python',
-    difficulty: '入门',
-    duration: 10,
-    image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Python%20programming%20for%20data%20analysis%20classroom%20setting&image_size=landscape_16_9',
-    rating: 4.8
-  },
-  {
-    id: 2,
-    title: 'Python数据可视化',
-    description: '使用Matplotlib和Seaborn创建精美的可视化',
-    category: '数据可视化',
-    difficulty: '中级',
-    duration: 8,
-    image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Data%20visualization%20charts%20and%20graphs%20using%20Python&image_size=landscape_16_9',
-    rating: 4.9
-  },
-  {
-    id: 3,
-    title: '机器学习基础',
-    description: '机器学习概念和算法入门',
-    category: '机器学习',
-    difficulty: '中级',
-    duration: 12,
-    image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Machine%20learning%20algorithms%20and%20data%20models&image_size=landscape_16_9',
-    rating: 4.7
-  },
-  {
-    id: 4,
-    title: 'Python商务分析',
-    description: '将数据分析技术应用于商务问题',
-    category: '商务分析',
-    difficulty: '高级',
-    duration: 15,
-    image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Business%20analytics%20dashboard%20with%20Python&image_size=landscape_16_9',
-    rating: 4.6
-  },
-  {
-    id: 5,
-    title: '数据分析师SQL',
-    description: '学习数据查询和分析所需的SQL',
-    category: 'SQL与数据库',
-    difficulty: '入门',
-    duration: 6,
-    image_url: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=SQL%20database%20queries%20for%20data%20analysis&image_size=landscape_16_9',
-    rating: 4.8
-  }
-];
+import { courses } from '../data/courses';
 
 const Courses: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [filteredCourses, setFilteredCourses] = useState(mockCourses);
+  const [filteredCourses, setFilteredCourses] = useState(courses);
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '全部');
   const [selectedDifficulty, setSelectedDifficulty] = useState('全部');
   
-  const categories = ['全部', 'Python', '数据可视化', '机器学习', 'SQL与数据库', '商务分析'];
+  const categories = ['全部', ...new Set(courses.map(course => course.category))];
   const difficulties = ['全部', '入门', '中级', '高级'];
 
   useEffect(() => {
-    let result = mockCourses;
+    let result = courses;
     
     if (selectedCategory !== '全部') {
       result = result.filter(course => course.category === selectedCategory);
