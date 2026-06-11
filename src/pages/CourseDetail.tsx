@@ -429,22 +429,24 @@ const CourseDetail: React.FC = () => {
                 <h4 className="font-medium mb-3">测评题目：</h4>
                 <ul className="space-y-6">
                   {selectedAssessment.content.map((item: any, index: number) => {
-                    const question = typeof item === 'string' ? item : item.question;
-                    const initialCode = typeof item === 'string' ? '# 在此输入Python代码...' : item.initialCode;
+                    const isObjectType = typeof item === 'object' && item !== null;
+                    const question = isObjectType ? item.question : item;
+                    const initialCode = isObjectType ? item.initialCode : '# 在此输入Python代码...';
+                    const hasCodeEditor = isObjectType || selectedAssessment.type === '项目' || question.includes('Python') || question.includes('代码');
                     
                     return (
                       <li key={index} className="p-4 border rounded-lg">
-                        <div className="font-medium mb-4">{index + 1}. {question}</div>
+                        <div className="font-medium mb-4">{question}</div>
                         
-                        {/* 代码编辑器（对于需要编程的测评题） */}
-                        {(selectedAssessment.type === '项目' || question.includes('Python') || question.includes('代码')) && (
+                        {/* 代码编辑器 */}
+                        {hasCodeEditor && (
                           <CodeEditor
                             initialCode={initialCode}
                           />
                         )}
                         
                         {/* 普通答题区域 */}
-                        {!(selectedAssessment.type === '项目' || question.includes('Python') || question.includes('代码')) && (
+                        {!hasCodeEditor && (
                           <div className="mt-2">
                             <textarea 
                               className="w-full p-3 border rounded-lg" 
