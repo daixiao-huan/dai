@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import Courses from "@/pages/Courses";
 import CourseDetail from "@/pages/CourseDetail";
+import LessonView from "@/pages/LessonView";
 import Practice from "@/pages/Practice";
 import Quizzes from "@/pages/Quizzes";
 import Progress from "@/pages/Progress";
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:id" element={<CourseDetail />} />
+        <Route path="/courses/:id/lessons/:lessonId" element={<LessonView />} />
         <Route path="/practice" element={<Practice />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/progress" element={<Progress />} />
